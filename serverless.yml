@@ -23,10 +23,24 @@ frameworkVersion: "2"
 provider:
   name: aws
   runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  # To load environment variables externally
+  # rename env.example to .env and uncomment
+  # the following line. Also, make sure to not
+  # commit your .env.
+  environment:
+   JWT_SECRET: ${env:JWT_SECRET}
 
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
+
+# Plugins
+plugins:
+# - serverless-bundle # Package our functions with Webpack
+# - serverless-offline
+- serverless-dotenv-plugin # Load .env as environment variables
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -56,12 +70,23 @@ provider:
 #  exclude:
 #    - exclude-me.js
 #    - exclude-me-dir/**
+package:
+  excludeDevDependencies: false
 
 functions:
   app-api:
-    handler: handler.handler
-    environment:
-      JWT_SECRET: sam.leung
+    handler: handler.main
+    description: description
+    memorySize: 128
+    timeout: 5
+    # role: arn-role
+    # tags:
+    #   Department: IT
+    #   Name: name
+    #   Team: team
+    #   TeamMember: TeamMember
+    # environment:
+    #   key: value
     events:
       - http:
           path: /
@@ -122,3 +147,40 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+
+# custom:
+#   bundle:
+#     sourcemaps: false                # Enable source maps
+#     caching: true                   # Enable Webpack caching
+#     stats: false                    # Don't print out any Webpack output
+#     linting: true                   # Enable linting as a part of the build process
+    # tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
+    # forceInclude:                   # Optional list of NPM packages that need to be included
+    #   - mysql                         # Only necessary if packages are included dynamically
+    # ignorePackages:                 # Ignore building any of the following packages
+    #   - hiredis                       # For ex, hiredis needs to be ignored if using redis
+    # externals:                      # Set non Webpack compatible packages as externals
+    #   - isomorphic-webcrypto          # They'll be included in the node_modules/, more below
+    # forceExclude:                   # Don't include these in the package
+    #   - chrome-aws-lambda             # Because it'll be provided through a Lambda Layer
+    # fixPackages:                    # Include fixes for specific packages
+    #   - "formidable@1.x"              # For ex, formidable@1.x doesn't work by default with Webpack
+    # copyFiles:                      # Copy any additional files to the generated package
+    #   - from: './package.json'              # Where the files are currently
+    #     to: './'                      # Where in the package should they go
+    # aliases:                        # Create an alias to 'import' modules easily with a custom path
+    #   - "@root": .       # For ex, replace the long 'custom-lib/src/lib' with 'Lib'
+    #   - "@middleware": src/middleware,
+    #   - "@utils": src/utils,
+    #   - "@routers": src/routers
+    # concatText:                     # Concatenate text files into one file on the generated package
+    #   - files: 'schema/*.txt'         # Where the files that need to be concatenated are currently located
+    #     outputPath: './'              # Where the concatenated file should go in the package
+    #     name: 'schema.txt'            # The name the the concatenated file should have
+    # packager: npm                   # Specify a packager, 'npm' or 'yarn'. Defaults to 'npm'.
+    # packagerOptions:                # Run a custom script in the package process
+    #   scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
+    #     - echo hello > test
+    # rawFileExtensions:              # An array of file extensions to import using the Webpack raw-loader.
+    #   - csv                         # Defaults to ['pem', 'txt']

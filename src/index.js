@@ -12,7 +12,7 @@ const { checkToken } = require("@middleware/auth");
 const { routes: userRouter } = require("@routers/userRouter");
 const { routes: loginRouter } = require("@routers/loginRouter");
 
-const PORT = process.env.APP_PORT || 3000;
+// const PORT = process.env.APP_PORT || 3000;
 const app = express();
 
 app.use(cors());
