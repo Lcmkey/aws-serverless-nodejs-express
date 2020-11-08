@@ -23,9 +23,9 @@ $ sls deploy
 
 1. create `.env` file
 
-  ```properties
-  $ cp .env.exmaple .env
-  ```
+    ```properties
+    $ cp .env.exmaple .env
+    ```
 
 2. uncomment app listener
 
@@ -72,3 +72,16 @@ $ sls deploy
        }
    ]
    ```
+
+ # Others
+
+### Init project
+```
+$ npm init -y
+```
+
+### Init Serverless Project
+
+```
+$ serverless
+```
